@@ -2,7 +2,7 @@ import Link from "next/link";
 import { Plane, Hotel, Palmtree, TrainFront, Bus, Car } from "lucide-react";
 import { requireUser } from "@/lib/auth";
 import { prisma } from "@/lib/db";
-import { completePastBookings } from "@/lib/booking";
+import { completePastBookings, expireStaleHolds } from "@/lib/booking";
 import { Empty } from "@/components/ui";
 import { fmtDateTime } from "@/lib/format";
 import { SVC_LABEL, type Svc } from "@/lib/pricing";
@@ -16,7 +16,7 @@ export const STATUS: Record<string, [string, string]> = {
 export default async function Page({ searchParams }: { searchParams: Promise<{ tab?: string }> }) {
   const { tab = "upcoming" } = await searchParams;
   const user = await requireUser("/my-trips");
-  await completePastBookings(user.id);
+  await Promise.all([completePastBookings(user.id), expireStaleHolds(user.id)]);
   const where =
     tab === "cancelled" ? { status: "CANCELLED" as const } : tab === "completed" ? { status: "COMPLETED" as const } : tab === "pending" ? { status: "PENDING_PAYMENT" as const } : { status: "CONFIRMED" as const };
   const [list, counts] = await Promise.all([

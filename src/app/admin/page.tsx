@@ -3,6 +3,7 @@ import { IndianRupee, Ticket, Users, XCircle, Clock, MessageSquare } from "lucid
 import { prisma } from "@/lib/db";
 import { inr, fmtDate } from "@/lib/format";
 import { AdminTitle, STATUS_BADGE } from "./AdminUI";
+import { expireStaleHolds } from "@/lib/booking";
 
 export const dynamic = "force-dynamic";
 
@@ -14,8 +15,9 @@ function startOfWindow(days: number) {
 
 export default async function Dashboard() {
   const since = startOfWindow(30);
+  await expireStaleHolds();
   const [paid, counts, users, enquiries, byType, recent, last30] = await Promise.all([
-    prisma.booking.aggregate({ where: { paymentStatus: { in: ["PAID", "PARTIALLY_REFUNDED", "REFUNDED"] } }, _sum: { total: true, refundAmount: true } }),
+    prisma.booking.aggregate({ where: { paymentStatus: { in: ["PAID", "PARTIALLY_REFUNDED", "REFUNDED"] } }, _sum: { total: true, walletUsed: true, refundAmount: true } }),
     prisma.booking.groupBy({ by: ["status"], _count: true }),
     prisma.user.count(),
     prisma.enquiry.count({ where: { status: "NEW" } }),
@@ -24,7 +26,7 @@ export default async function Dashboard() {
     prisma.booking.findMany({ where: { createdAt: { gte: since }, status: { in: ["CONFIRMED", "COMPLETED"] } }, select: { createdAt: true, total: true } }),
   ]);
   const c = Object.fromEntries(counts.map((x) => [x.status, x._count])) as Record<string, number>;
-  const revenue = (paid._sum.total ?? 0) - (paid._sum.refundAmount ?? 0);
+  const revenue = (paid._sum.total ?? 0) + (paid._sum.walletUsed ?? 0) - (paid._sum.refundAmount ?? 0);
   const days = Array.from({ length: 30 }, (_, i) => { const d = new Date(since.getTime() + i * 864e5); return { key: d.toDateString(), label: d.getDate(), v: 0 }; });
   for (const b of last30) { const d = days.find((x) => x.key === b.createdAt.toDateString()); if (d) d.v += b.total; }
   const max = Math.max(1, ...days.map((d) => d.v));

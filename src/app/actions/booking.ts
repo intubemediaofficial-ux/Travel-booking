@@ -7,7 +7,7 @@ import { cancelBooking, confirmBooking, createBooking, previewCoupon, type Trave
 import { RESOLVERS, BookErr } from "@/lib/resolve";
 import type { Svc } from "@/lib/pricing";
 import { prisma } from "@/lib/db";
-import { verifyRazorpay } from "@/lib/payment";
+import { razorpayEnabled, verifyRazorpay } from "@/lib/payment";
 
 export type BookState = { error?: string } | undefined;
 
@@ -21,6 +21,7 @@ export async function bookAction(_: BookState, fd: FormData): Promise<BookState>
   const svc = String(fd.get("svc")) as Svc;
   const resolver = RESOLVERS[svc];
   if (!resolver) return { error: "Invalid booking" };
+  if (!["FLIGHT", "HOTEL", "HOLIDAY", "TRAIN", "BUS", "CAB"].includes(svc)) return { error: "Invalid booking" };
   const params: Record<string, string> = {};
   for (const [k, v] of fd.entries()) if (k.startsWith("p_")) params[k.slice(2)] = String(v);
   let ref = "";
@@ -47,6 +48,7 @@ export async function bookAction(_: BookState, fd: FormData): Promise<BookState>
       userId: user.id, type: svc, itemId: r.itemId, title: r.title, subtitle: r.subtitle, travelDate: r.travelDate, endDate: r.endDate,
       details: details as object, travellers, seats: r.seats, contact, base: r.base, pax: r.pax, nightly: r.nightly,
       couponCode: String(fd.get("coupon") ?? ""), useWallet: fd.get("useWallet") === "on", lines: r.lines,
+      recheck: () => resolver(params),
     });
     if (fd.get("saveTravellers") === "on" && r.mode === "full") {
       const existing = new Set((await prisma.savedTraveller.findMany({ where: { userId: user.id } })).map((t) => t.name.toLowerCase()));
@@ -68,6 +70,7 @@ export async function mockPayAction(_: PayState, fd: FormData): Promise<PayState
   const user = await requireUser();
   const ref = String(fd.get("ref"));
   const method = String(fd.get("method") ?? "UPI");
+  if (razorpayEnabled()) return { error: "Please pay using the secure payment gateway" };
   const b = await prisma.booking.findUnique({ where: { ref } });
   if (!b || b.userId !== user.id) return { error: "Booking not found" };
   if (method === "UPI") {
@@ -75,7 +78,10 @@ export async function mockPayAction(_: PayState, fd: FormData): Promise<PayState
   } else if (method === "CARD") {
     const num = String(fd.get("card") ?? "").replace(/\s/g, "");
     if (!/^\d{12,19}$/.test(num) || !luhn(num)) return { error: "Enter a valid card number" };
-    if (!/^(0[1-9]|1[0-2])\/\d{2}$/.test(String(fd.get("exp") ?? ""))) return { error: "Enter expiry as MM/YY" };
+    const exp = /^(0[1-9]|1[0-2])\/(\d{2})$/.exec(String(fd.get("exp") ?? "").trim());
+    if (!exp) return { error: "Enter expiry as MM/YY" };
+    const now = new Date();
+    if (2000 + Number(exp[2]) < now.getFullYear() || (2000 + Number(exp[2]) === now.getFullYear() && Number(exp[1]) < now.getMonth() + 1)) return { error: "This card has expired" };
     if (!/^\d{3,4}$/.test(String(fd.get("cvv") ?? ""))) return { error: "Enter CVV" };
   } else if (method === "NETBANKING") {
     if (!fd.get("bank")) return { error: "Choose your bank" };

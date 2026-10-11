@@ -29,7 +29,8 @@ export type Resolved = {
 
 type P = Record<string, string | undefined>;
 const int = (v: string | undefined, d: number, min = 0, max = 99) => Math.min(max, Math.max(min, Number.isFinite(Number(v)) && v !== "" && v != null ? Math.floor(Number(v)) : d));
-const validDate = (d?: string) => !!d && /^\d{4}-\d{2}-\d{2}$/.test(d) && d >= todayIST();
+const isDate = (d?: string): d is string => !!d && /^\d{4}-\d{2}-\d{2}$/.test(d) && !Number.isNaN(Date.parse(`${d}T00:00:00Z`)) && new Date(`${d}T00:00:00Z`).toISOString().startsWith(d);
+const validDate = (d?: string) => isDate(d) && d >= todayIST() && d <= addDays(todayIST(), 365);
 
 export class BookErr extends Error {}
 
@@ -84,7 +85,7 @@ export async function resolveFlight(p: P): Promise<Resolved> {
 export async function resolveHotel(p: P): Promise<Resolved> {
   const room = await prisma.room.findFirst({ where: { id: p.room ?? "", hotel: { active: true } }, include: { hotel: { include: { city: true } } } });
   if (!room) throw new BookErr("Room not found");
-  if (!validDate(p.in) || !p.out || p.out <= p.in!) throw new BookErr("Please choose valid check-in and check-out dates");
+  if (!validDate(p.in) || !isDate(p.out) || p.out <= p.in!) throw new BookErr("Please choose valid check-in and check-out dates");
   const nights = nightsBetween(p.in!, p.out);
   if (nights > 30) throw new BookErr("Maximum stay is 30 nights");
   const rooms = int(p.rooms, 1, 1, 5);
@@ -200,10 +201,11 @@ export async function resolveCab(p: P): Promise<Resolved> {
   const from = await prisma.city.findUnique({ where: { code: p.from ?? "" } });
   const to = trip === "AIRPORT" ? null : await prisma.city.findUnique({ where: { code: p.to ?? "" } });
   if (!from || (trip !== "AIRPORT" && (!to || to.id === from.id))) throw new BookErr("Choose valid pickup and drop cities");
-  if (!validDate(p.date) || !/^\d{2}:\d{2}$/.test(p.time ?? "")) throw new BookErr("Choose a valid pickup date and time");
+  if (!validDate(p.date) || !/^([01]\d|2[0-3]):[0-5]\d$/.test(p.time ?? "")) throw new BookErr("Choose a valid pickup date and time");
   const pickupAt = istDate(p.date!, p.time!);
   if (pickupAt.getTime() < Date.now() + 2 * 3600_000) throw new BookErr("Pickup must be at least 2 hours from now");
-  const ret = trip === "ROUND" ? (p.ret && p.ret >= p.date! ? p.ret : p.date!) : undefined;
+  const ret = trip === "ROUND" ? (isDate(p.ret) && p.ret >= p.date! ? p.ret : p.date!) : undefined;
+  if (ret && nightsBetween(p.date!, ret) > 30) throw new BookErr("Round trips can be at most 30 days");
   const days = ret ? nightsBetween(p.date!, ret) + 1 : 1;
   const dist = cabDistance(from, to, trip, days);
   const fare = cabFare(cab, dist, trip, days);
