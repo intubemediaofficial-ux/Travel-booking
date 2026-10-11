@@ -1,0 +1,356 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Role {
+  USER
+  ADMIN
+}
+
+enum BookingType {
+  FLIGHT
+  HOTEL
+  HOLIDAY
+  TRAIN
+  BUS
+  CAB
+}
+
+enum BookingStatus {
+  PENDING_PAYMENT
+  CONFIRMED
+  CANCELLED
+  COMPLETED
+}
+
+enum PaymentStatus {
+  PENDING
+  PAID
+  REFUNDED
+  PARTIALLY_REFUNDED
+  FAILED
+}
+
+model User {
+  id            String       @id @default(cuid())
+  name          String
+  email         String       @unique
+  phone         String?
+  passwordHash  String
+  role          Role         @default(USER)
+  walletBalance Int          @default(0)
+  blocked       Boolean      @default(false)
+  createdAt     DateTime     @default(now())
+  bookings      Booking[]
+  reviews       Review[]
+  wishlist      Wishlist[]
+  walletTxns    WalletTxn[]
+  travellers    SavedTraveller[]
+}
+
+model SavedTraveller {
+  id        String   @id @default(cuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  name      String
+  age       Int
+  gender    String
+  createdAt DateTime @default(now())
+}
+
+model City {
+  id          String    @id @default(cuid())
+  name        String    @unique
+  code        String    @unique
+  airport     String?
+  station     String?
+  state       String
+  country     String    @default("India")
+  lat         Float
+  lng         Float
+  image       String?
+  description String?
+  popular     Boolean   @default(false)
+  flightsFrom Flight[]  @relation("flightFrom")
+  flightsTo   Flight[]  @relation("flightTo")
+  hotels      Hotel[]
+  packages    Package[]
+  busesFrom   Bus[]     @relation("busFrom")
+  busesTo     Bus[]     @relation("busTo")
+  trainsFrom  Train[]   @relation("trainFrom")
+  trainsTo    Train[]   @relation("trainTo")
+}
+
+model Airline {
+  id      String   @id @default(cuid())
+  name    String   @unique
+  code    String   @unique
+  color   String   @default("#0f62fe")
+  flights Flight[]
+}
+
+model Flight {
+  id           String  @id @default(cuid())
+  flightNo     String
+  airlineId    String
+  airline      Airline @relation(fields: [airlineId], references: [id], onDelete: Cascade)
+  fromCityId   String
+  fromCity     City    @relation("flightFrom", fields: [fromCityId], references: [id], onDelete: Cascade)
+  toCityId     String
+  toCity       City    @relation("flightTo", fields: [toCityId], references: [id], onDelete: Cascade)
+  departTime   String
+  durationMins Int
+  stops        Int     @default(0)
+  stopCity     String?
+  days         String  @default("1234567")
+  economyFare  Int
+  premiumFare  Int
+  businessFare Int
+  seats        Int     @default(180)
+  baggage      String  @default("15 kg check-in, 7 kg cabin")
+  refundable   Boolean @default(true)
+  meal         Boolean @default(false)
+  active       Boolean @default(true)
+}
+
+model Hotel {
+  id          String    @id @default(cuid())
+  name        String
+  slug        String    @unique
+  cityId      String
+  city        City      @relation(fields: [cityId], references: [id], onDelete: Cascade)
+  type        String    @default("Hotel")
+  address     String
+  locality    String?
+  stars       Int       @default(3)
+  rating      Float     @default(4.0)
+  reviewCount Int       @default(0)
+  description String
+  amenities   String[]
+  images      String[]
+  checkIn     String    @default("12:00")
+  checkOut    String    @default("11:00")
+  policies    String?
+  featured    Boolean   @default(false)
+  active      Boolean   @default(true)
+  rooms       Room[]
+  reviews     Review[]
+  createdAt   DateTime  @default(now())
+}
+
+model Room {
+  id         String   @id @default(cuid())
+  hotelId    String
+  hotel      Hotel    @relation(fields: [hotelId], references: [id], onDelete: Cascade)
+  name       String
+  price      Int
+  maxGuests  Int      @default(2)
+  bed        String   @default("King Bed")
+  size       String?
+  amenities  String[]
+  breakfast  Boolean  @default(false)
+  freeCancel Boolean  @default(true)
+  inventory  Int      @default(10)
+  image      String?
+}
+
+model Package {
+  id            String   @id @default(cuid())
+  title         String
+  slug          String   @unique
+  cityId        String
+  city          City     @relation(fields: [cityId], references: [id], onDelete: Cascade)
+  category      String   @default("Family")
+  nights        Int
+  price         Int
+  originalPrice Int?
+  images        String[]
+  highlights    String[]
+  inclusions    String[]
+  exclusions    String[]
+  itinerary     Json     @default("[]")
+  featured      Boolean  @default(false)
+  active        Boolean  @default(true)
+  createdAt     DateTime @default(now())
+}
+
+model Bus {
+  id           String   @id @default(cuid())
+  operator     String
+  busType      String
+  sleeper      Boolean  @default(false)
+  fromCityId   String
+  fromCity     City     @relation("busFrom", fields: [fromCityId], references: [id], onDelete: Cascade)
+  toCityId     String
+  toCity       City     @relation("busTo", fields: [toCityId], references: [id], onDelete: Cascade)
+  departTime   String
+  durationMins Int
+  fare         Int
+  seats        Int      @default(36)
+  boarding     String[]
+  dropping     String[]
+  amenities    String[]
+  rating       Float    @default(4.2)
+  days         String   @default("1234567")
+  active       Boolean  @default(true)
+}
+
+model Train {
+  id           String  @id @default(cuid())
+  number       String
+  name         String
+  fromCityId   String
+  fromCity     City    @relation("trainFrom", fields: [fromCityId], references: [id], onDelete: Cascade)
+  toCityId     String
+  toCity       City    @relation("trainTo", fields: [toCityId], references: [id], onDelete: Cascade)
+  departTime   String
+  durationMins Int
+  days         String  @default("1234567")
+  classes      Json    @default("[]")
+  pantry       Boolean @default(false)
+  active       Boolean @default(true)
+}
+
+model CabType {
+  id       String  @id @default(cuid())
+  name     String
+  models   String
+  seats    Int
+  bags     Int     @default(2)
+  perKm    Int
+  baseFare Int
+  ac       Boolean @default(true)
+  image    String?
+  active   Boolean @default(true)
+}
+
+model Coupon {
+  id          String    @id @default(cuid())
+  code        String    @unique
+  title       String
+  description String
+  kind        String    @default("PERCENT")
+  value       Int
+  maxDiscount Int?
+  minAmount   Int       @default(0)
+  appliesTo   String    @default("ALL")
+  validTill   DateTime?
+  usageLimit  Int?
+  usedCount   Int       @default(0)
+  showAsOffer Boolean   @default(true)
+  image       String?
+  active      Boolean   @default(true)
+  createdAt   DateTime  @default(now())
+}
+
+model Booking {
+  id             String        @id @default(cuid())
+  ref            String        @unique
+  pnr            String?
+  userId         String
+  user           User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  type           BookingType
+  status         BookingStatus @default(PENDING_PAYMENT)
+  itemId         String
+  title          String
+  subtitle       String?
+  travelDate     DateTime
+  endDate        DateTime?
+  details        Json          @default("{}")
+  travellers     Json          @default("[]")
+  seats          String[]
+  contactName    String
+  contactEmail   String
+  contactPhone   String
+  baseAmount     Int
+  taxes          Int           @default(0)
+  fee            Int           @default(0)
+  discount       Int           @default(0)
+  couponCode     String?
+  walletUsed     Int           @default(0)
+  total          Int
+  paymentStatus  PaymentStatus @default(PENDING)
+  paymentMethod  String?
+  paymentRef     String?
+  paidAt         DateTime?
+  refundAmount   Int           @default(0)
+  refundTo       String?
+  cancelReason   String?
+  cancelledAt    DateTime?
+  createdAt      DateTime      @default(now())
+  updatedAt      DateTime      @updatedAt
+  lines          BookingLine[]
+
+  @@index([userId])
+  @@index([type, itemId, travelDate])
+}
+
+model WalletTxn {
+  id        String   @id @default(cuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  amount    Int
+  kind      String
+  note      String
+  bookingId String?
+  createdAt DateTime @default(now())
+}
+
+model Review {
+  id        String   @id @default(cuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  hotelId   String
+  hotel     Hotel    @relation(fields: [hotelId], references: [id], onDelete: Cascade)
+  rating    Int
+  title     String?
+  comment   String
+  approved  Boolean  @default(true)
+  createdAt DateTime @default(now())
+}
+
+model Wishlist {
+  id        String   @id @default(cuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  kind      String
+  itemId    String
+  createdAt DateTime @default(now())
+
+  @@unique([userId, kind, itemId])
+}
+
+model Enquiry {
+  id        String   @id @default(cuid())
+  name      String
+  email     String
+  phone     String
+  subject   String
+  message   String
+  packageId String?
+  status    String   @default("NEW")
+  createdAt DateTime @default(now())
+}
+
+model Setting {
+  key   String @id
+  value Json
+}
+
+model BookingLine {
+  id        String   @id @default(cuid())
+  bookingId String
+  booking   Booking  @relation(fields: [bookingId], references: [id], onDelete: Cascade)
+  itemId    String
+  date      String
+  endDate   String?
+  qty       Int      @default(1)
+  seatNos   String[]
+
+  @@index([itemId, date])
+}
