@@ -20,8 +20,8 @@ export default async function Page() {
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img src={o.image ?? "/img/hero2.jpg"} alt="" className="h-40 w-full object-cover" />
                 <div className="flex flex-1 flex-col p-5">
-                  <span className="text-[11px] font-extrabold uppercase tracking-wider text-accent-600">{o.appliesTo === "ALL" ? "All bookings" : o.appliesTo}</span>
-                  <h2 className="mt-1 text-lg font-extrabold">{o.title}</h2>
+                  <span className="text-[11px] font-bold uppercase tracking-wider text-accent-600">{o.appliesTo === "ALL" ? "All bookings" : o.appliesTo}</span>
+                  <h2 className="mt-1 text-lg font-bold">{o.title}</h2>
                   <p className="mt-1 flex-1 text-sm text-slate-600">{o.description}</p>
                   <p className="mt-2 text-xs text-slate-500">{o.kind === "PERCENT" ? `${o.value}% off${o.maxDiscount ? ` up to ₹${o.maxDiscount.toLocaleString("en-IN")}` : ""}` : `Flat ₹${o.value.toLocaleString("en-IN")} off`}{o.minAmount ? ` · Min booking ₹${o.minAmount.toLocaleString("en-IN")}` : ""}{o.validTill ? ` · Valid till ${fmtDate(o.validTill)}` : ""}</p>
                   <div className="mt-3"><CopyCode code={o.code} /></div>

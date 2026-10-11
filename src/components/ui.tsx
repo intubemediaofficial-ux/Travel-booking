@@ -14,8 +14,8 @@ export function Rating({ v, count }: { v: number; count?: number }) {
   const label = v >= 4.5 ? "Excellent" : v >= 4 ? "Very Good" : v >= 3.5 ? "Good" : "Average";
   return (
     <span className="inline-flex items-center gap-2">
-      <span className="rounded-md bg-brand-600 px-1.5 py-0.5 text-xs font-extrabold text-white">{v.toFixed(1)}</span>
-      <span className="text-xs font-bold text-brand-700">{label}</span>
+      <span className="rounded-md rounded-bl-none bg-brand-800 px-1.5 py-0.5 text-xs font-semibold text-accent-400">{v.toFixed(1)}</span>
+      <span className="text-xs font-semibold text-brand-800">{label}</span>
       {count != null && <span className="text-xs text-slate-500">({count.toLocaleString("en-IN")} ratings)</span>}
     </span>
   );
@@ -23,7 +23,7 @@ export function Rating({ v, count }: { v: number; count?: number }) {
 
 export function SearchBand({ children }: { children: React.ReactNode }) {
   return (
-    <div className="no-print bg-gradient-to-r from-brand-900 via-brand-800 to-brand-700 pb-6 pt-4">
+    <div className="no-print pattern-dots border-b-4 border-accent-500 bg-brand-900 pb-6 pt-5">
       <div className="mx-auto max-w-7xl px-4">{children}</div>
     </div>
   );
@@ -33,8 +33,8 @@ export function Empty({ title, text, children }: { title: string; text?: string;
   return (
     <div className="card flex flex-col items-center px-6 py-14 text-center">
       {/* eslint-disable-next-line @next/next/no-img-element */}
-      <img src="/img/hero.jpg" alt="" className="mb-5 h-28 w-44 rounded-2xl object-cover opacity-80" />
-      <h3 className="text-lg font-extrabold text-slate-800">{title}</h3>
+      <img src="/img/hero.jpg" alt="" className="mb-5 h-28 w-44 rounded-xl object-cover opacity-80 grayscale" />
+      <h3 className="text-lg font-bold text-slate-800">{title}</h3>
       {text && <p className="mt-1 max-w-md text-sm text-slate-500">{text}</p>}
       {children && <div className="mt-5">{children}</div>}
     </div>
@@ -43,12 +43,14 @@ export function Empty({ title, text, children }: { title: string; text?: string;
 
 export function PageTitle({ title, subtitle, image = "/img/hero2.jpg" }: { title: string; subtitle?: string; image?: string }) {
   return (
-    <div className="relative overflow-hidden bg-brand-900">
+    <div className="relative overflow-hidden bg-brand-950">
       {/* eslint-disable-next-line @next/next/no-img-element */}
-      <img src={image} alt="" className="absolute inset-0 h-full w-full object-cover opacity-35" />
-      <div className="relative mx-auto max-w-7xl px-4 py-12 text-white">
-        <h1 className="text-3xl font-extrabold md:text-4xl">{title}</h1>
-        {subtitle && <p className="mt-2 max-w-2xl text-white/80">{subtitle}</p>}
+      <img src={image} alt="" className="absolute inset-y-0 right-0 h-full w-full object-cover opacity-60 md:w-1/2 md:[mask-image:linear-gradient(to_right,transparent,black_40%)]" />
+      <div className="absolute inset-0 bg-gradient-to-r from-brand-950 via-brand-950/80 to-transparent md:hidden" />
+      <div className="relative mx-auto max-w-7xl px-4 py-14 text-white">
+        <p className="eyebrow text-accent-400">Intube Trip</p>
+        <h1 className="mt-2 max-w-xl text-3xl font-semibold leading-tight md:text-5xl">{title}</h1>
+        {subtitle && <p className="mt-3 max-w-xl text-white/75">{subtitle}</p>}
       </div>
     </div>
   );

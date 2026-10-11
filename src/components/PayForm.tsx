@@ -37,7 +37,7 @@ export function PayForm(props: {
     return (
       <div className="card p-8 text-center">
         <Timer className="mx-auto h-10 w-10 text-red-500" />
-        <p className="mt-3 text-lg font-extrabold">Payment session expired</p>
+        <p className="mt-3 text-lg font-bold">Payment session expired</p>
         <p className="text-sm text-slate-500">Your seats/rooms have been released. Please search and book again.</p>
         <Link href="/" className="btn-primary mt-5">Back to home</Link>
       </div>
@@ -61,7 +61,7 @@ export function PayForm(props: {
     <div className="card overflow-hidden">
       <div className="flex items-center justify-between bg-amber-50 px-5 py-3 text-sm font-semibold text-amber-800">
         <span>Complete payment to confirm your booking</span>
-        <span className="flex items-center gap-1 font-extrabold" data-testid="timer"><Timer className="h-4 w-4" /> {mm}:{ss}</span>
+        <span className="flex items-center gap-1 font-bold" data-testid="timer"><Timer className="h-4 w-4" /> {mm}:{ss}</span>
       </div>
       {props.razorpay ? (
         <div className="p-6">

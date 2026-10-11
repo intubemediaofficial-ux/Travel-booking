@@ -29,7 +29,7 @@ export function SeatPicker(p: { busId: string; date: string; layout: Layout; tak
         <div className="flex flex-wrap gap-8">
           {p.layout.decks.map((d) => (
             <div key={d.name}>
-              <p className="mb-2 text-sm font-extrabold">{d.name}</p>
+              <p className="mb-2 text-sm font-bold">{d.name}</p>
               <div className="grid gap-2 rounded-2xl border-2 border-slate-200 p-4" style={{ gridTemplateColumns: `repeat(${d.cols + 1}, minmax(0, 1fr))` }}>
                 {d.seats.map((s, i) => {
                   const isTaken = taken.has(s);

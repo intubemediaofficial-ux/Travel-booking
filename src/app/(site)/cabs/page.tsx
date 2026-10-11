@@ -30,7 +30,7 @@ export default async function Page({ searchParams }: { searchParams: Promise<Rec
       <div className="mx-auto max-w-6xl px-4 py-6">
         {invalid ? <Empty title="Choose different pickup & drop cities" /> : (
           <>
-            <h1 className="mb-1 flex items-center gap-2 text-xl font-extrabold"><Car className="h-5 w-5 text-brand-600" /> {trip === "AIRPORT" ? `${a!.name} airport transfer` : `${a!.name} → ${b!.name}${trip === "ROUND" ? ` → ${a!.name}` : ""}`}</h1>
+            <h1 className="mb-1 flex items-center gap-2 text-xl font-bold"><Car className="h-5 w-5 text-brand-600" /> {trip === "AIRPORT" ? `${a!.name} airport transfer` : `${a!.name} → ${b!.name}${trip === "ROUND" ? ` → ${a!.name}` : ""}`}</h1>
             <p className="mb-5 text-sm text-slate-500">{fmtDate(date, { weekday: "short" })} {time}{ret && ` – ${fmtDate(ret)}`} · approx {dist} km{trip === "ROUND" ? ` · ${days} day${days > 1 ? "s" : ""}` : ""}</p>
             <div className="space-y-4">
               {cabs.map((c) => {
@@ -40,7 +40,7 @@ export default async function Page({ searchParams }: { searchParams: Promise<Rec
                     {/* eslint-disable-next-line @next/next/no-img-element */}
                     <img src={c.image ?? "/img/cab.jpg"} alt={c.name} className="h-36 w-full object-cover md:h-full" />
                     <div className="p-4">
-                      <p className="text-lg font-extrabold">{c.name}</p>
+                      <p className="text-lg font-bold">{c.name}</p>
                       <p className="text-sm text-slate-500">{c.models} or similar</p>
                       <div className="mt-2 flex flex-wrap gap-2 text-xs">
                         <span className="chip"><Users className="h-3.5 w-3.5" /> {c.seats} seats</span>
@@ -51,7 +51,7 @@ export default async function Page({ searchParams }: { searchParams: Promise<Rec
                       <p className="mt-2 text-xs font-semibold text-emerald-700">Free cancellation up to 6 hrs before pickup</p>
                     </div>
                     <div className="p-4 text-right">
-                      <p className="text-2xl font-extrabold">₹{fare.toLocaleString("en-IN")}</p>
+                      <p className="text-2xl font-bold">₹{fare.toLocaleString("en-IN")}</p>
                       <p className="text-[11px] text-slate-500">incl. driver allowance & fuel</p>
                       <Link href={`/book/cab?${new URLSearchParams({ cab: c.id, trip, from, to, date, time, ...(ret ? { ret } : {}) })}`} className="btn-accent mt-2" data-testid="cab-book">Book cab</Link>
                     </div>

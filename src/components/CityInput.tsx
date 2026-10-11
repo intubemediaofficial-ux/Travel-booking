@@ -43,15 +43,15 @@ export function CityInput({
       <button
         type="button"
         onClick={() => setOpen(true)}
-        className="w-full rounded-xl border border-slate-200 bg-white px-4 py-3 text-left hover:border-brand-400"
+        className="w-full rounded-lg border border-sand-200 bg-sand-50 px-4 py-2.5 text-left transition hover:border-brand-400"
         data-testid={`city-${name}`}
       >
-        <span className="block text-xs font-bold uppercase tracking-wide text-slate-500">{label}</span>
-        <span className="block truncate text-xl font-extrabold text-slate-900">{cur?.name ?? "Select city"}</span>
+        <span className="block text-[10px] font-semibold uppercase tracking-[0.16em] text-brand-700/70">{label}</span>
+        <span className="block truncate text-lg font-semibold text-brand-950">{cur?.name ?? "Select city"}</span>
         <span className="block truncate text-xs text-slate-500">{cur ? `${cur.code}, ${sub(cur)}` : "Tap to choose"}</span>
       </button>
       {open && (
-        <div className="absolute left-0 top-full z-30 mt-1 w-80 max-w-[90vw] overflow-hidden rounded-xl bg-white shadow-2xl ring-1 ring-slate-200">
+        <div className="absolute left-0 top-full z-30 mt-1 w-80 max-w-[90vw] overflow-hidden rounded-xl border border-sand-200 bg-white shadow-2xl">
           <input
             autoFocus
             className="w-full border-b border-slate-200 px-4 py-3 text-sm outline-none"
@@ -65,7 +65,7 @@ export function CityInput({
               <li key={c.code}>
                 <button
                   type="button"
-                  className="flex w-full items-center gap-3 px-4 py-2 text-left hover:bg-brand-50"
+                  className="flex w-full items-center gap-3 px-4 py-2 text-left hover:bg-sand-100"
                   onClick={() => {
                     onChange(c.code);
                     setOpen(false);

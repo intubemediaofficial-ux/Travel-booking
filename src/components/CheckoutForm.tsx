@@ -54,7 +54,7 @@ export function CheckoutForm(props: {
       <input type="hidden" name="coupon" value={applied?.code ?? ""} />
       <div className="space-y-6">
         <section className="card p-6">
-          <h2 className="mb-4 text-lg font-extrabold">{props.mode === "lead" ? "Guest details" : "Traveller details"}</h2>
+          <h2 className="mb-4 text-lg font-bold">{props.mode === "lead" ? "Guest details" : "Traveller details"}</h2>
           {props.saved.length > 0 && props.mode === "full" && (
             <div className="mb-4 flex flex-wrap gap-2">
               <span className="text-xs font-bold text-slate-500">Saved travellers:</span>
@@ -95,7 +95,7 @@ export function CheckoutForm(props: {
           )}
         </section>
         <section className="card p-6">
-          <h2 className="mb-4 text-lg font-extrabold">Contact details <span className="text-sm font-normal text-slate-500">(e-ticket will be sent here)</span></h2>
+          <h2 className="mb-4 text-lg font-bold">Contact details <span className="text-sm font-normal text-slate-500">(e-ticket will be sent here)</span></h2>
           <div className="grid gap-3 sm:grid-cols-2">
             <div><label className="label">Email</label><input name="email" type="email" required defaultValue={props.contact.email} className="input" /></div>
             <div><label className="label">Mobile</label><input name="phone" required defaultValue={props.contact.phone} className="input" placeholder="98765 43210" /></div>
@@ -107,18 +107,18 @@ export function CheckoutForm(props: {
 
       <aside className="space-y-4 lg:sticky lg:top-20 lg:self-start">
         <section className="card p-5">
-          <h2 className="mb-3 text-lg font-extrabold">Fare summary</h2>
+          <h2 className="mb-3 text-lg font-bold">Fare summary</h2>
           <dl className="space-y-2 text-sm">
             <div className="flex justify-between"><dt>Base fare</dt><dd>₹{q.base.toLocaleString("en-IN")}</dd></div>
             <div className="flex justify-between"><dt>Taxes & GST</dt><dd>₹{q.taxes.toLocaleString("en-IN")}</dd></div>
             {q.fee > 0 && <div className="flex justify-between"><dt>Convenience fee</dt><dd>₹{q.fee.toLocaleString("en-IN")}</dd></div>}
             {q.discount > 0 && <div className="flex justify-between text-emerald-700"><dt>Coupon ({applied?.code})</dt><dd>− ₹{q.discount.toLocaleString("en-IN")}</dd></div>}
             {q.walletUsed > 0 && <div className="flex justify-between text-emerald-700"><dt>Wallet</dt><dd>− ₹{q.walletUsed.toLocaleString("en-IN")}</dd></div>}
-            <div className="flex justify-between border-t border-dashed pt-3 text-lg font-extrabold"><dt>Total</dt><dd data-testid="total">₹{q.total.toLocaleString("en-IN")}</dd></div>
+            <div className="flex justify-between border-t border-dashed pt-3 text-lg font-bold"><dt>Total</dt><dd data-testid="total">₹{q.total.toLocaleString("en-IN")}</dd></div>
           </dl>
         </section>
         <section className="card p-5">
-          <h3 className="mb-3 flex items-center gap-2 font-extrabold"><BadgePercent className="h-5 w-5 text-accent-500" /> Coupons & offers</h3>
+          <h3 className="mb-3 flex items-center gap-2 font-bold"><BadgePercent className="h-5 w-5 text-accent-500" /> Coupons & offers</h3>
           <div className="flex gap-2">
             <input className="input uppercase" placeholder="Enter coupon code" value={code} onChange={(e) => setCode(e.target.value)} aria-label="Coupon code" />
             <button type="button" className="btn-ghost" disabled={!code || checking} onClick={() => apply(code)}>{checking ? <Loader2 className="h-4 w-4 animate-spin" /> : "Apply"}</button>
@@ -129,7 +129,7 @@ export function CheckoutForm(props: {
             {props.coupons.map((c) => (
               <li key={c.code}>
                 <button type="button" onClick={() => apply(c.code)} className={`w-full rounded-xl border px-3 py-2 text-left text-xs ${applied?.code === c.code ? "border-emerald-400 bg-emerald-50" : "border-slate-200 hover:border-brand-300"}`}>
-                  <span className="font-extrabold tracking-wide text-brand-700">{c.code}</span> — {c.title}
+                  <span className="font-bold tracking-wide text-brand-700">{c.code}</span> — {c.title}
                 </button>
               </li>
             ))}

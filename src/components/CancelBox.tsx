@@ -10,7 +10,7 @@ export function CancelBox({ ref_, allowed, refund, note, paid }: { ref_: string;
     <section className="card no-print mt-5 p-5">
       <div className="flex flex-wrap items-center justify-between gap-3">
         <div>
-          <h2 className="font-extrabold">Cancel booking</h2>
+          <h2 className="font-bold">Cancel booking</h2>
           <p className="text-sm text-slate-600">{allowed ? <>Refund: <b className="text-emerald-700">₹{refund.toLocaleString("en-IN")}</b> of ₹{paid.toLocaleString("en-IN")} · {note}</> : note}</p>
         </div>
         {allowed && !open && <button type="button" className="btn-danger" onClick={() => setOpen(true)} data-testid="cancel-open">Cancel booking</button>}

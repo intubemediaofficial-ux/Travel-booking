@@ -18,18 +18,18 @@ type FlightRow = Awaited<ReturnType<typeof searchFlights>>[number];
 
 function FlightCard({ f, href, cta, pax }: { f: FlightRow; href: string; cta: string; pax: number }) {
   return (
-    <div className="card p-5 transition hover:shadow-lg" data-testid="flight-card">
+    <div className="card border-l-4 border-l-brand-700 p-5 transition hover:border-l-accent-500 hover:shadow-lg" data-testid="flight-card">
       <div className="grid items-center gap-4 md:grid-cols-[180px_1fr_150px]">
         <div className="flex items-center gap-3">
-          <span className="grid h-10 w-10 place-items-center rounded-xl text-xs font-extrabold text-white" style={{ background: f.airline.color }}>{f.airline.code}</span>
+          <span className="grid h-10 w-10 place-items-center rounded-xl text-xs font-bold text-white" style={{ background: f.airline.color }}>{f.airline.code}</span>
           <div>
-            <p className="font-extrabold text-slate-900">{f.airline.name}</p>
+            <p className="font-bold text-slate-900">{f.airline.name}</p>
             <p className="text-xs text-slate-500">{f.flightNo}</p>
           </div>
         </div>
         <div className="flex items-center justify-between gap-3">
           <div className="text-center">
-            <p className="text-xl font-extrabold">{f.departTime}</p>
+            <p className="text-xl font-bold">{f.departTime}</p>
             <p className="text-xs text-slate-500">{f.fromCity.code}</p>
           </div>
           <div className="flex flex-1 flex-col items-center text-xs text-slate-500">
@@ -38,12 +38,12 @@ function FlightCard({ f, href, cta, pax }: { f: FlightRow; href: string; cta: st
             <span className={f.stops ? "text-amber-700" : "text-emerald-700"}>{f.stops ? `${f.stops} stop · ${f.stopCity}` : "Non-stop"}</span>
           </div>
           <div className="text-center">
-            <p className="text-xl font-extrabold">{f.arrTime}{f.arrDays > 0 && <sup className="text-xs text-red-500"> +{f.arrDays}</sup>}</p>
+            <p className="text-xl font-bold">{f.arrTime}{f.arrDays > 0 && <sup className="text-xs text-red-500"> +{f.arrDays}</sup>}</p>
             <p className="text-xs text-slate-500">{f.toCity.code}</p>
           </div>
         </div>
         <div className="flex flex-col items-end gap-1">
-          <p className="text-2xl font-extrabold text-slate-900">₹{f.fare.toLocaleString("en-IN")}</p>
+          <p className="text-2xl font-bold text-slate-900">₹{f.fare.toLocaleString("en-IN")}</p>
           <p className="text-[11px] text-slate-500">per adult</p>
           {f.available ? (
             <Link href={href} className="btn-primary w-full" data-testid="flight-book">{cta}</Link>
@@ -107,7 +107,7 @@ export default async function Page({ searchParams }: { searchParams: Promise<SP>
       </SearchBand>
       <div className="mx-auto max-w-7xl px-4 py-6">
         <div className="mb-4 flex flex-wrap items-center justify-between gap-3">
-          <h1 className="flex items-center gap-2 text-xl font-extrabold text-slate-900">
+          <h1 className="flex items-center gap-2 text-xl font-bold text-slate-900">
             <Plane className="h-5 w-5 text-brand-600" /> {leg === "return" ? "Select return flight: " : ret ? "Select onward flight: " : "Flights from "}
             {cn[legFrom]} <ArrowRight className="h-4 w-4" /> {cn[legTo]}
             <span className="text-sm font-semibold text-slate-500">· {fmtDate(legDate, { weekday: "short" })} · {CABIN[cls]} · {pax} traveller{pax > 1 ? "s" : ""}</span>
@@ -117,14 +117,14 @@ export default async function Page({ searchParams }: { searchParams: Promise<SP>
         <div className="mb-5 flex gap-2 overflow-x-auto">
           {cal.map((c) => (
             <Link key={c.date} href={`/flights?${qs(leg === "return" ? { ret: c.date } : { date: c.date, f: undefined })}`}
-              className={`min-w-28 rounded-xl border px-3 py-2 text-center text-xs ${c.date === legDate ? "border-brand-500 bg-brand-50 font-extrabold text-brand-700" : "border-slate-200 bg-white hover:border-brand-300"}`}>
+              className={`min-w-28 rounded-xl border px-3 py-2 text-center text-xs ${c.date === legDate ? "border-brand-500 bg-brand-50 font-bold text-brand-700" : "border-slate-200 bg-white hover:border-brand-300"}`}>
               <p>{fmtDate(c.date, { weekday: "short" })}</p>
               <p className={`mt-0.5 font-bold ${c.fare ? "text-slate-900" : "text-slate-400"}`}>{c.fare ? `₹${c.fare.toLocaleString("en-IN")}` : "—"}</p>
             </Link>
           ))}
         </div>
         <div className="grid gap-6 lg:grid-cols-[260px_1fr]">
-          <aside className="card h-fit p-5">
+          <aside className="card h-fit overflow-hidden p-5 lg:sticky lg:top-24"><p className="-mx-5 -mt-5 mb-4 flex items-center justify-between bg-brand-900 px-5 py-3 text-sm font-semibold text-white">Refine results <span className="h-2 w-2 rounded-full bg-accent-500" /></p>
             <FilterForm keep={keep}>
               <FilterGroup title="Stops">
                 <Check name="stops" value="0" label="Non-stop" checked={stops.includes("0")} extra={String(all.filter((f) => !f.stops).length)} />
@@ -144,7 +144,7 @@ export default async function Page({ searchParams }: { searchParams: Promise<SP>
           <section className="space-y-4">
             <div className="flex flex-wrap gap-2 text-sm">
               {[["cheapest", "Cheapest"], ["fastest", "Fastest"], ["early", "Early departure"], ["late", "Late departure"]].map(([k, l]) => (
-                <Link key={k} href={`/flights?${qs({ sort: k })}`} className={`rounded-full px-4 py-1.5 font-bold ${sort === k ? "bg-brand-600 text-white" : "bg-white text-slate-600 ring-1 ring-slate-200"}`}>{l}</Link>
+                <Link key={k} href={`/flights?${qs({ sort: k })}`} className={`border-b-2 px-3 py-2 font-semibold transition ${sort === k ? "border-accent-500 text-brand-800" : "border-transparent text-slate-500 hover:text-brand-700"}`}>{l}</Link>
               ))}
               <span className="ml-auto self-center text-slate-500">{list.length} flights</span>
             </div>

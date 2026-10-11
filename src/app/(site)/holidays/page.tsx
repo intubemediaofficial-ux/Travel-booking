@@ -30,9 +30,9 @@ export default async function Page({ searchParams }: { searchParams: Promise<SP>
     <>
       <SearchBand><SearchWidget cities={cities} initial="holidays" tabs={false} compact params={{ dest, cat: cats[0] }} /></SearchBand>
       <div className="mx-auto max-w-7xl px-4 py-6">
-        <h1 className="mb-4 text-xl font-extrabold">Holiday packages {dest && `· ${cities.find((c) => c.code === dest)?.name}`}</h1>
+        <h1 className="mb-4 text-xl font-bold">Holiday packages {dest && `· ${cities.find((c) => c.code === dest)?.name}`}</h1>
         <div className="grid gap-6 lg:grid-cols-[240px_1fr]">
-          <aside className="card h-fit p-5">
+          <aside className="card h-fit overflow-hidden p-5 lg:sticky lg:top-24"><p className="-mx-5 -mt-5 mb-4 flex items-center justify-between bg-brand-900 px-5 py-3 text-sm font-semibold text-white">Refine results <span className="h-2 w-2 rounded-full bg-accent-500" /></p>
             <FilterForm keep={keep}>
               <FilterGroup title="Theme">{categories.map((c) => <Check key={c} name="c" value={c} label={c} checked={cats.includes(c)} />)}</FilterGroup>
               <FilterGroup title="Duration">
@@ -45,7 +45,7 @@ export default async function Page({ searchParams }: { searchParams: Promise<SP>
           <section>
             <div className="mb-4 flex flex-wrap gap-2 text-sm">
               {[["popular", "Popular"], ["low", "Price: low to high"], ["high", "Price: high to low"]].map(([k, l]) => (
-                <Link key={k} href={`/holidays?${new URLSearchParams({ ...keep, sort: k })}`} className={`rounded-full px-4 py-1.5 font-bold ${sort === k ? "bg-brand-600 text-white" : "bg-white text-slate-600 ring-1 ring-slate-200"}`}>{l}</Link>
+                <Link key={k} href={`/holidays?${new URLSearchParams({ ...keep, sort: k })}`} className={`border-b-2 px-3 py-2 font-semibold transition ${sort === k ? "border-accent-500 text-brand-800" : "border-transparent text-slate-500 hover:text-brand-700"}`}>{l}</Link>
               ))}
               <span className="ml-auto self-center text-slate-500">{list.length} packages</span>
             </div>
@@ -61,9 +61,9 @@ export default async function Page({ searchParams }: { searchParams: Promise<SP>
                     </div>
                     <div className="p-4">
                       <p className="text-xs font-bold uppercase text-accent-600">{p.category} · {p.city.name}</p>
-                      <h2 className="mt-1 font-extrabold text-slate-900">{p.title}</h2>
+                      <h2 className="mt-1 font-bold text-slate-900">{p.title}</h2>
                       <ul className="mt-2 space-y-0.5 text-xs text-slate-600">{p.highlights.slice(0, 3).map((h) => <li key={h}>• {h}</li>)}</ul>
-                      <p className="mt-3 text-sm text-slate-500">{p.originalPrice && <span className="mr-2 line-through">{inr(p.originalPrice)}</span>}<span className="text-xl font-extrabold text-slate-900">{inr(p.price)}</span> /person</p>
+                      <p className="mt-3 text-sm text-slate-500">{p.originalPrice && <span className="mr-2 line-through">{inr(p.originalPrice)}</span>}<span className="text-xl font-bold text-slate-900">{inr(p.price)}</span> /person</p>
                     </div>
                   </Link>
                 ))}

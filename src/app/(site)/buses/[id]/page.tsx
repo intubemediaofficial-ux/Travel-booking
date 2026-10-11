@@ -20,7 +20,7 @@ export default async function Page({ params, searchParams }: { params: Promise<{
     <div className="mx-auto max-w-6xl px-4 py-8">
       <Link href={`/buses?from=${b.fromCity.code}&to=${b.toCity.code}&date=${date}`} className="text-sm font-bold text-brand-600">← Back to results</Link>
       <div className="card mt-3 flex flex-wrap items-center justify-between gap-4 p-5">
-        <div><p className="text-xl font-extrabold">{b.operator}</p><p className="text-sm text-slate-500">{b.busType} · {b.fromCity.name} → {b.toCity.name}</p></div>
+        <div><p className="text-xl font-bold">{b.operator}</p><p className="text-sm text-slate-500">{b.busType} · {b.fromCity.name} → {b.toCity.name}</p></div>
         <p className="text-sm font-semibold">{fmtDate(date, { weekday: "short" })} · {b.departTime} → {arr.time}{arr.days ? " (+1)" : ""} · {duration(b.durationMins)}</p>
       </div>
       <SeatPicker busId={b.id} date={date} layout={busLayout(b.sleeper, b.seats)} taken={taken} fare={busFare(b, date)} boarding={b.boarding} dropping={b.dropping} />

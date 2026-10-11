@@ -15,15 +15,15 @@ export default async function Page() {
   return (
     <div className="mx-auto max-w-5xl px-4 py-8">
       <div className="card mb-6 flex items-center gap-4 p-6">
-        <span className="grid h-16 w-16 place-items-center rounded-full bg-brand-600 text-2xl font-extrabold text-white">{user.name[0]?.toUpperCase()}</span>
-        <div><h1 className="text-2xl font-extrabold">{user.name}</h1><p className="text-sm text-slate-500">{user.email} · {stats} trips · Wallet ₹{user.walletBalance.toLocaleString("en-IN")}</p></div>
+        <span className="grid h-16 w-16 place-items-center rounded-full bg-brand-600 text-2xl font-bold text-white">{user.name[0]?.toUpperCase()}</span>
+        <div><h1 className="text-2xl font-bold">{user.name}</h1><p className="text-sm text-slate-500">{user.email} · {stats} trips · Wallet ₹{user.walletBalance.toLocaleString("en-IN")}</p></div>
       </div>
       <div className="grid gap-6 md:grid-cols-2">
         <ProfileForm name={user.name} phone={user.phone ?? ""} email={user.email} />
         <PasswordForm />
       </div>
       <section className="card mt-6 p-6">
-        <h2 className="mb-4 text-lg font-extrabold">Saved travellers</h2>
+        <h2 className="mb-4 text-lg font-bold">Saved travellers</h2>
         <div className="space-y-2">
           {travellers.length === 0 && <p className="text-sm text-slate-500">No saved travellers yet.</p>}
           {travellers.map((t) => (

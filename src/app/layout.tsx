@@ -1,9 +1,9 @@
 import type { Metadata } from "next";
-import { Plus_Jakarta_Sans } from "next/font/google";
+import { Outfit } from "next/font/google";
 import "./globals.css";
 import { getSettings } from "@/lib/settings";
 
-const jakarta = Plus_Jakarta_Sans({ subsets: ["latin"], variable: "--font-jakarta" });
+const outfit = Outfit({ subsets: ["latin"], variable: "--font-outfit" });
 
 export async function generateMetadata(): Promise<Metadata> {
   const s = await getSettings();
@@ -17,7 +17,7 @@ export async function generateMetadata(): Promise<Metadata> {
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html lang="en" className={jakarta.variable}>
+    <html lang="en" className={outfit.variable}>
       <body className="min-h-screen font-sans">{children}</body>
     </html>
   );

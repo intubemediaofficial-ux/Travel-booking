@@ -33,7 +33,7 @@ export default async function UserAdmin({ params }: { params: Promise<{ id: stri
           </div>
         </div>
         <div className="space-y-4">
-          <div className="card p-4"><p className="text-xs font-bold uppercase text-slate-500">Wallet balance</p><p className="text-2xl font-extrabold">{inr(u.walletBalance)}</p></div>
+          <div className="card p-4"><p className="text-xs font-bold uppercase text-slate-500">Wallet balance</p><p className="text-2xl font-bold">{inr(u.walletBalance)}</p></div>
           <div className="card p-4"><h3 className="mb-2 font-bold">Adjust wallet</h3>
             <OpForm action={adminUserAction} hidden={{ id: u.id, op: "wallet" }} label="Apply"><input name="amount" type="number" className="input" placeholder="e.g. 500 or -200" required /><input name="note" className="input" placeholder="Note (e.g. goodwill credit)" /></OpForm></div>
           <div className="card p-4"><h3 className="mb-2 font-bold">Role</h3>

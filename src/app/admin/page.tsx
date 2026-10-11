@@ -44,7 +44,7 @@ export default async function Dashboard() {
       <AdminTitle title="Dashboard" subtitle="Overview of bookings, revenue and customers" />
       <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-6" data-testid="admin-stats">
         {stats.map(([l, v, I, cls]) => (
-          <div key={l} className="card p-4"><div className={`mb-3 inline-flex rounded-xl p-2 ${cls}`}><I className="h-5 w-5" /></div><p className="text-xs font-bold uppercase text-slate-500">{l}</p><p className="text-xl font-extrabold">{v}</p></div>
+          <div key={l} className="card p-4"><div className={`mb-3 inline-flex rounded-xl p-2 ${cls}`}><I className="h-5 w-5" /></div><p className="text-xs font-bold uppercase text-slate-500">{l}</p><p className="text-xl font-bold">{v}</p></div>
         ))}
       </div>
       <div className="mt-6 grid gap-6 xl:grid-cols-3">
