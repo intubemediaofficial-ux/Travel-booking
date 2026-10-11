@@ -1,4 +1,5 @@
 import "server-only";
+import { REFERRAL_BONUS } from "./referral";
 import crypto from "crypto";
 import type { BookingType, Prisma } from "@prisma/client";
 import { prisma } from "./db";
@@ -117,6 +118,12 @@ export async function confirmBooking(ref: string, method: string, paymentRef: st
       const debited = await tx.user.updateMany({ where: { id: b.userId, walletBalance: { gte: b.walletUsed } }, data: { walletBalance: { decrement: b.walletUsed } } });
       if (debited.count !== 1) throw new Error("Insufficient wallet balance");
       await tx.walletTxn.create({ data: { userId: b.userId, amount: -b.walletUsed, kind: "DEBIT", note: `Used for booking ${b.ref}`, bookingId: b.id } });
+    }
+    const rewarded = await tx.user.updateMany({ where: { id: b.userId, referredById: { not: null }, referralRewarded: false }, data: { referralRewarded: true } });
+    if (rewarded.count === 1) {
+      const u = await tx.user.findUniqueOrThrow({ where: { id: b.userId }, select: { name: true, referredById: true } });
+      await tx.user.update({ where: { id: u.referredById! }, data: { walletBalance: { increment: REFERRAL_BONUS } } });
+      await tx.walletTxn.create({ data: { userId: u.referredById!, amount: REFERRAL_BONUS, kind: "REFERRAL", note: `Referral reward — ${u.name} completed their first booking` } });
     }
     if (b.couponCode) {
       const c = await tx.coupon.findUnique({ where: { code: b.couponCode } });

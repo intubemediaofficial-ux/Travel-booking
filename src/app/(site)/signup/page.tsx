@@ -3,11 +3,11 @@ import { AuthShell } from "@/components/AuthShell";
 
 export const metadata = { title: "Create account" };
 
-export default async function Page({ searchParams }: { searchParams: Promise<{ next?: string }> }) {
+export default async function Page({ searchParams }: { searchParams: Promise<{ next?: string; ref?: string }> }) {
   const sp = await searchParams;
   return (
     <AuthShell title="Create your account" subtitle="Sign up in 30 seconds and start booking">
-      <SignupForm next={sp.next ?? "/"} />
+      <SignupForm next={sp.next ?? "/"} refCode={sp.ref ?? ""} />
     </AuthShell>
   );
 }

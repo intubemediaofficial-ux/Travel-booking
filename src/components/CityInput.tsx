@@ -47,7 +47,7 @@ export function CityInput({
         data-testid={`city-${name}`}
       >
         <span className="block text-[10px] font-semibold uppercase tracking-[0.16em] text-brand-700/70">{label}</span>
-        <span className="block truncate text-lg font-semibold text-brand-950">{cur?.name ?? "Select city"}</span>
+        <span className="block truncate text-base font-semibold text-brand-950 md:text-lg">{cur?.name ?? "Select city"}</span>
         <span className="block truncate text-xs text-slate-500">{cur ? `${cur.code}, ${sub(cur)}` : "Tap to choose"}</span>
       </button>
       {open && (

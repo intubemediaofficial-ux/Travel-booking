@@ -45,6 +45,9 @@ model User {
   role          Role         @default(USER)
   walletBalance Int          @default(0)
   blocked       Boolean      @default(false)
+  referralCode  String?      @unique
+  referredById  String?
+  referralRewarded Boolean   @default(false)
   createdAt     DateTime     @default(now())
   bookings      Booking[]
   reviews       Review[]
