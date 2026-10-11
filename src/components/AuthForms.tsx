@@ -30,7 +30,7 @@ export function LoginForm({ next }: { next: string }) {
   );
 }
 
-export function SignupForm({ next }: { next: string }) {
+export function SignupForm({ next, refCode = "" }: { next: string; refCode?: string }) {
   const [s, act, pending] = useActionState(signupAction, undefined);
   return (
     <form action={act} className="space-y-4">
@@ -39,6 +39,7 @@ export function SignupForm({ next }: { next: string }) {
       <div><label className="label" htmlFor="email">Email</label><input id="email" name="email" type="email" required className="input" /></div>
       <div><label className="label" htmlFor="phone">Mobile number</label><input id="phone" name="phone" required className="input" placeholder="98765 43210" /></div>
       <div><label className="label" htmlFor="password">Password</label><input id="password" name="password" type="password" required minLength={6} className="input" /></div>
+      <div><label className="label" htmlFor="ref">Referral code (optional)</label><input id="ref" name="ref" defaultValue={refCode} className="input uppercase" placeholder="Get ₹200 in your wallet" /></div>
       <Msg s={s} />
       <button className="btn-primary w-full py-3" disabled={pending}>{pending ? "Creating account…" : "Create account"}</button>
       <p className="text-center text-sm">Already have an account? <Link href={`/login?next=${encodeURIComponent(next)}`} className="font-semibold text-brand-600">Login</Link></p>

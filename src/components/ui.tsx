@@ -47,9 +47,9 @@ export function PageTitle({ title, subtitle, image = "/img/hero2.jpg" }: { title
       {/* eslint-disable-next-line @next/next/no-img-element */}
       <img src={image} alt="" className="absolute inset-y-0 right-0 h-full w-full object-cover opacity-60 md:w-1/2 md:[mask-image:linear-gradient(to_right,transparent,black_40%)]" />
       <div className="absolute inset-0 bg-gradient-to-r from-brand-950 via-brand-950/80 to-transparent md:hidden" />
-      <div className="relative mx-auto max-w-7xl px-4 py-14 text-white">
+      <div className="relative mx-auto max-w-7xl px-4 py-9 text-white md:py-14">
         <p className="eyebrow text-accent-400">Intube Trip</p>
-        <h1 className="mt-2 max-w-xl text-3xl font-semibold leading-tight md:text-5xl">{title}</h1>
+        <h1 className="mt-2 max-w-xl text-2xl font-semibold leading-tight sm:text-3xl md:text-5xl">{title}</h1>
         {subtitle && <p className="mt-3 max-w-xl text-white/75">{subtitle}</p>}
       </div>
     </div>

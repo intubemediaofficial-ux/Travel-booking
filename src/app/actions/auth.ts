@@ -28,19 +28,36 @@ export async function loginAction(_: FormState, fd: FormData): Promise<FormState
   redirect(next === "/" && user.role === "ADMIN" ? "/admin" : next);
 }
 
+import { REFERRAL_BONUS, newReferralCode } from "@/lib/referral";
+
 const signupSchema = z.object({
   name: z.string().trim().min(2, "Please enter your full name"),
   email: z.string().trim().toLowerCase().email("Enter a valid email"),
   phone: z.string().trim().regex(/^[+]?[0-9 ]{10,15}$/, "Enter a valid mobile number"),
   password: z.string().min(6, "Password must be at least 6 characters"),
+  ref: z.string().trim().toUpperCase().max(20).optional(),
 });
 
 export async function signupAction(_: FormState, fd: FormData): Promise<FormState> {
   const p = signupSchema.safeParse(Object.fromEntries(fd));
   if (!p.success) return { error: p.error.issues[0].message };
   if (await prisma.user.findUnique({ where: { email: p.data.email } })) return { error: "An account with this email already exists. Please login." };
-  const user = await prisma.user.create({
-    data: { name: p.data.name, email: p.data.email, phone: p.data.phone, passwordHash: await bcrypt.hash(p.data.password, 10) },
+  const referrer = p.data.ref ? await prisma.user.findUnique({ where: { referralCode: p.data.ref } }) : null;
+  if (p.data.ref && !referrer) return { error: "This referral code is not valid" };
+  const user = await prisma.$transaction(async (tx) => {
+    const u = await tx.user.create({
+      data: {
+        name: p.data.name,
+        email: p.data.email,
+        phone: p.data.phone,
+        passwordHash: await bcrypt.hash(p.data.password, 10),
+        referralCode: await newReferralCode(p.data.name),
+        referredById: referrer?.id,
+        walletBalance: referrer ? REFERRAL_BONUS : 0,
+      },
+    });
+    if (referrer) await tx.walletTxn.create({ data: { userId: u.id, amount: REFERRAL_BONUS, kind: "REFERRAL", note: `Welcome bonus — referred by ${referrer.name}` } });
+    return u;
   });
   await createSession(user.id);
   redirect(safeNext(fd.get("next")));

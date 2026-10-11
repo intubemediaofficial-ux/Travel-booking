@@ -29,7 +29,7 @@ function Box({ label, children }: { label: string; children: React.ReactNode }) 
   );
 }
 
-const field = "w-full bg-transparent text-base font-semibold text-brand-950 outline-none";
+const field = "w-full min-w-0 bg-transparent text-[15px] font-semibold text-brand-950 outline-none [color-scheme:light] md:text-base";
 
 export function SearchWidget({
   cities,
@@ -116,7 +116,7 @@ export function SearchWidget({
           ))}
         </div>
       )}
-      <form onSubmit={submit} className={`relative p-5 ${tabs ? "md:p-7" : "rounded-xl bg-white shadow-xl shadow-black/20"}`}>
+      <form onSubmit={submit} className={`relative bg-white p-4 sm:p-5 ${tabs ? "md:p-7" : "rounded-xl bg-white shadow-xl shadow-black/20"}`}>
         {tabs && <p className="eyebrow mb-3">Search {TABS.find((t) => t.id === tab)?.label.toLowerCase()}</p>}
         {tab === "flights" && (
           <>
@@ -235,7 +235,7 @@ export function SearchWidget({
         )}
         <div className={`flex items-center justify-between gap-3 ${compact ? "mt-3" : "mt-5 border-t border-dashed border-sand-200 pt-4"}`}>
           <p className={`text-xs text-slate-500 ${compact ? "hidden" : "hidden sm:block"}`}>Live fares · Free cancellation options · Instant e-ticket</p>
-          <button className={`btn-accent ml-auto ${compact ? "px-8" : "px-10 py-3 text-base"}`} data-testid="search-btn">
+          <button className={`btn-accent w-full sm:ml-auto sm:w-auto ${compact ? "px-8" : "px-10 py-3 text-base"}`} data-testid="search-btn">
             <Search className="h-5 w-5" /> Search
           </button>
         </div>

@@ -54,6 +54,7 @@ export async function Footer() {
             <li><Link className="hover:text-white" href="/trains/pnr">PNR status</Link></li>
             <li><Link className="hover:text-white" href="/offers">Offers & coupons</Link></li>
             <li><Link className="hover:text-white" href="/wishlist">Wishlist</Link></li>
+            <li><Link className="font-semibold text-accent-400 hover:text-white" href="/refer">Refer &amp; Earn ₹200</Link></li>
           </ul>
         </div>
         <div>
