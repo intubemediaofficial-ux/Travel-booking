@@ -14,7 +14,7 @@ export function StayPicker(p: { cin: string; cout: string; rooms: number; guests
   const path = usePathname();
   return (
     <div className="card space-y-3 p-5">
-      <h3 className="font-extrabold">Your stay</h3>
+      <h3 className="font-bold">Your stay</h3>
       <div className="grid grid-cols-2 gap-2">
         <div><label className="label">Check-in</label><input type="date" className="input" min={iso(new Date())} value={cin} onChange={(e) => { setCin(e.target.value); if (cout <= e.target.value) { const d = new Date(e.target.value); d.setDate(d.getDate() + 1); setCout(d.toISOString().slice(0, 10)); } }} /></div>
         <div><label className="label">Check-out</label><input type="date" className="input" min={cin} value={cout} onChange={(e) => setCout(e.target.value)} /></div>

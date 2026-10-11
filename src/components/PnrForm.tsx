@@ -18,7 +18,7 @@ export function PnrForm() {
       {r && (
         <div className="card p-5" data-testid="pnr-result">
           <p className="text-xs font-bold uppercase text-slate-400">PNR {r.pnr} · {r.type}</p>
-          <p className="text-lg font-extrabold">{r.title}</p>
+          <p className="text-lg font-bold">{r.title}</p>
           <p className="text-sm text-slate-500">{r.subtitle}</p>
           <p className="mt-1 text-sm">Journey: <b>{new Date(r.travelDate).toLocaleString("en-IN", { timeZone: "Asia/Kolkata", dateStyle: "medium", timeStyle: "short" })}</b> · Status: <b className={r.status === "CANCELLED" ? "text-red-600" : "text-emerald-700"}>{r.status}</b></p>
           <table className="mt-4 w-full text-sm"><thead><tr className="text-left text-xs uppercase text-slate-400"><th>#</th><th>Passenger</th><th>Age</th><th>Current status</th></tr></thead>

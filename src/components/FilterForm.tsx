@@ -15,7 +15,7 @@ export function FilterForm({ children, keep }: { children: React.ReactNode; keep
     router.push(`${path}?${q.toString()}`, { scroll: false });
   };
   return (
-    <form ref={ref} onChange={apply} onSubmit={(e) => { e.preventDefault(); apply(); }} className="space-y-5">
+    <form ref={ref} onChange={apply} onSubmit={(e) => { e.preventDefault(); apply(); }} className="divide-y divide-sand-200 [&>fieldset]:py-4 [&>fieldset:first-child]:pt-0">
       {children}
     </form>
   );
@@ -24,18 +24,18 @@ export function FilterForm({ children, keep }: { children: React.ReactNode; keep
 export function FilterGroup({ title, children }: { title: string; children: React.ReactNode }) {
   return (
     <fieldset>
-      <legend className="mb-2 text-sm font-extrabold text-slate-800">{title}</legend>
-      <div className="space-y-1.5">{children}</div>
+      <legend className="float-left mb-2.5 w-full text-[11px] font-semibold uppercase tracking-[0.16em] text-brand-700/80">{title}</legend>
+      <div className="clear-both flex flex-wrap gap-1.5">{children}</div>
     </fieldset>
   );
 }
 
 export function Check({ name, value, label, checked, extra }: { name: string; value: string; label: string; checked: boolean; extra?: string }) {
   return (
-    <label className="flex cursor-pointer items-center gap-2 text-sm text-slate-700">
-      <input type="checkbox" name={name} value={value} defaultChecked={checked} className="h-4 w-4 accent-brand-600" />
-      <span className="flex-1">{label}</span>
-      {extra && <span className="text-xs text-slate-500">{extra}</span>}
+    <label className="inline-flex cursor-pointer items-center gap-1.5 rounded-lg border border-sand-200 bg-sand-50 px-2.5 py-1.5 text-[13px] text-slate-700 transition hover:border-brand-400 has-checked:border-brand-700 has-checked:bg-brand-700 has-checked:text-white">
+      <input type="checkbox" name={name} value={value} defaultChecked={checked} className="sr-only" />
+      <span>{label}</span>
+      {extra && <span className="text-[11px] opacity-70">{extra}</span>}
     </label>
   );
 }

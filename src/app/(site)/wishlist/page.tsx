@@ -23,7 +23,7 @@ export default async function Page() {
   );
   return (
     <div className="mx-auto max-w-6xl px-4 py-8">
-      <h1 className="mb-5 text-2xl font-extrabold">My wishlist</h1>
+      <h1 className="mb-5 text-2xl font-bold">My wishlist</h1>
       {hotels.length + pkgs.length === 0 ? <Empty title="Your wishlist is empty" text="Tap the heart on any hotel or holiday to save it here."><Link href="/hotels" className="btn-primary">Explore hotels</Link></Empty> : (
         <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
           {hotels.map((h) => (
@@ -31,7 +31,7 @@ export default async function Page() {
               <Link href={`/hotels/${h.slug}`}>
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img src={h.images[0]} alt="" className="h-44 w-full object-cover" />
-                <div className="p-4"><Stars n={h.stars} /><p className="font-extrabold">{h.name}</p><p className="text-xs text-slate-500">{h.city.name}</p><div className="mt-2 flex justify-between"><Rating v={h.rating} />{h.rooms[0] && <b>{inr(h.rooms[0].price)}</b>}</div></div>
+                <div className="p-4"><Stars n={h.stars} /><p className="font-bold">{h.name}</p><p className="text-xs text-slate-500">{h.city.name}</p><div className="mt-2 flex justify-between"><Rating v={h.rating} />{h.rooms[0] && <b>{inr(h.rooms[0].price)}</b>}</div></div>
               </Link>
               <Remove kind="HOTEL" id={h.id} />
             </div>
@@ -41,7 +41,7 @@ export default async function Page() {
               <Link href={`/holidays/${p.slug}`}>
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img src={p.images[0]} alt="" className="h-44 w-full object-cover" />
-                <div className="p-4"><p className="text-xs font-bold text-accent-600">{p.nights}N/{p.nights + 1}D</p><p className="font-extrabold">{p.title}</p><b>{inr(p.price)}</b></div>
+                <div className="p-4"><p className="text-xs font-bold text-accent-600">{p.nights}N/{p.nights + 1}D</p><p className="font-bold">{p.title}</p><b>{inr(p.price)}</b></div>
               </Link>
               <Remove kind="HOLIDAY" id={p.id} />
             </div>

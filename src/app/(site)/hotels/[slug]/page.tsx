@@ -36,7 +36,7 @@ export default async function Page({ params, searchParams }: { params: Promise<{
       <div className="flex flex-wrap items-start justify-between gap-4">
         <div>
           <div className="flex items-center gap-2"><Stars n={h.stars} /><span className="chip">{h.type}</span></div>
-          <h1 className="mt-1 text-3xl font-extrabold text-slate-900">{h.name}</h1>
+          <h1 className="mt-1 text-3xl font-bold text-slate-900">{h.name}</h1>
           <p className="mt-1 flex items-center gap-1 text-sm text-slate-600"><MapPin className="h-4 w-4 text-brand-600" /> {h.address}</p>
         </div>
         <div className="flex items-center gap-3">
@@ -56,12 +56,12 @@ export default async function Page({ params, searchParams }: { params: Promise<{
       <div className="mt-8 grid gap-8 lg:grid-cols-[1fr_340px]">
         <div className="space-y-8">
           <section>
-            <h2 className="mb-2 text-xl font-extrabold">About the property</h2>
+            <h2 className="mb-2 text-xl font-bold">About the property</h2>
             <p className="leading-relaxed text-slate-600">{h.description}</p>
             <div className="mt-4 grid grid-cols-2 gap-2 sm:grid-cols-3">{h.amenities.map((a) => <p key={a} className="flex items-center gap-2 text-sm"><Check className="h-4 w-4 text-emerald-600" /> {a}</p>)}</div>
           </section>
           <section id="rooms">
-            <h2 className="mb-3 text-xl font-extrabold">Choose your room <span className="text-sm font-semibold text-slate-500">· {fmtDate(cin)} – {fmtDate(cout)}, {nights} night{nights > 1 ? "s" : ""}</span></h2>
+            <h2 className="mb-3 text-xl font-bold">Choose your room <span className="text-sm font-semibold text-slate-500">· {fmtDate(cin)} – {fmtDate(cout)}, {nights} night{nights > 1 ? "s" : ""}</span></h2>
             <div className="space-y-4">
               {h.rooms.map((r) => {
                 const left = r.inventory - (used.get(r.id) ?? 0);
@@ -73,7 +73,7 @@ export default async function Page({ params, searchParams }: { params: Promise<{
                     {/* eslint-disable-next-line @next/next/no-img-element */}
                     <img src={r.image ?? h.images[0]} alt={r.name} className="h-44 w-full object-cover md:h-full" />
                     <div className="p-5">
-                      <h3 className="text-lg font-extrabold">{r.name}</h3>
+                      <h3 className="text-lg font-bold">{r.name}</h3>
                       <p className="mt-1 flex flex-wrap gap-3 text-sm text-slate-600">
                         <span className="flex items-center gap-1"><BedDouble className="h-4 w-4" /> {r.bed}</span>
                         <span className="flex items-center gap-1"><Users className="h-4 w-4" /> Max {r.maxGuests}</span>
@@ -86,7 +86,7 @@ export default async function Page({ params, searchParams }: { params: Promise<{
                       </ul>
                     </div>
                     <div className="flex flex-col justify-center gap-1 border-l border-dashed p-5 text-right">
-                      <p className="text-2xl font-extrabold">₹{sp2.perNight.toLocaleString("en-IN")}</p>
+                      <p className="text-2xl font-bold">₹{sp2.perNight.toLocaleString("en-IN")}</p>
                       <p className="text-[11px] text-slate-500">per room/night + taxes</p>
                       <p className="text-xs font-semibold">₹{(sp2.total * rooms).toLocaleString("en-IN")} for {rooms} room × {nights} night</p>
                       {ok ? (
@@ -102,12 +102,12 @@ export default async function Page({ params, searchParams }: { params: Promise<{
             </div>
           </section>
           <section>
-            <h2 className="mb-3 text-xl font-extrabold">Guest reviews</h2>
+            <h2 className="mb-3 text-xl font-bold">Guest reviews</h2>
             <div className="space-y-3">
               {h.reviews.length === 0 && <p className="text-sm text-slate-500">No reviews yet. Be the first to review!</p>}
               {h.reviews.map((rv) => (
                 <div key={rv.id} className="card p-4">
-                  <div className="flex items-center justify-between"><p className="font-bold">{rv.user.name}</p><span className="rounded-md bg-brand-600 px-1.5 py-0.5 text-xs font-extrabold text-white">{rv.rating}/5</span></div>
+                  <div className="flex items-center justify-between"><p className="font-bold">{rv.user.name}</p><span className="rounded-md bg-brand-600 px-1.5 py-0.5 text-xs font-bold text-white">{rv.rating}/5</span></div>
                   {rv.title && <p className="mt-1 font-semibold">{rv.title}</p>}
                   <p className="mt-1 text-sm text-slate-600">{rv.comment}</p>
                   <p className="mt-1 text-xs text-slate-400">{fmtDate(rv.createdAt)}</p>
@@ -120,7 +120,7 @@ export default async function Page({ params, searchParams }: { params: Promise<{
         <aside className="space-y-4 lg:sticky lg:top-20 lg:self-start">
           <StayPicker cin={cin} cout={cout} rooms={rooms} guests={guests} />
           <div className="card p-5 text-sm">
-            <h3 className="mb-2 font-extrabold">House rules</h3>
+            <h3 className="mb-2 font-bold">House rules</h3>
             <p className="flex items-center gap-2"><Clock className="h-4 w-4 text-brand-600" /> Check-in from {h.checkIn} · Check-out by {h.checkOut}</p>
             {h.policies && <p className="mt-2 text-slate-600">{h.policies}</p>}
           </div>

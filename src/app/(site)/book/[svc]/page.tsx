@@ -36,14 +36,14 @@ export default async function Page({ params, searchParams }: { params: Promise<{
   ]);
   return (
     <div className="mx-auto max-w-7xl px-4 py-8">
-      <h1 className="text-2xl font-extrabold text-slate-900">Review your booking</h1>
+      <h1 className="text-2xl font-bold text-slate-900">Review your booking</h1>
       <section className="card mt-4 mb-6 flex flex-col gap-4 overflow-hidden md:flex-row">
         {r.image && (
           // eslint-disable-next-line @next/next/no-img-element
           <img src={r.image} alt="" className="h-40 w-full object-cover md:h-auto md:w-56" />
         )}
         <div className="flex-1 p-5">
-          <p className="text-xl font-extrabold text-brand-900">{r.title}</p>
+          <p className="text-xl font-bold text-brand-900">{r.title}</p>
           <p className="text-sm text-slate-500">{r.subtitle}</p>
           <dl className="mt-4 grid gap-x-6 gap-y-2 text-sm sm:grid-cols-2">
             {r.summary.map(([k, v]) => (

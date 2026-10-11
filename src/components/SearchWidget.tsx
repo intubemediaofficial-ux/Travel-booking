@@ -22,14 +22,14 @@ const plus = (n: number) => iso(new Date(Date.now() + n * 86400_000));
 
 function Box({ label, children }: { label: string; children: React.ReactNode }) {
   return (
-    <label className="block rounded-xl border border-slate-200 bg-white px-4 py-3 hover:border-brand-400">
-      <span className="block text-xs font-bold uppercase tracking-wide text-slate-500">{label}</span>
+    <label className="block rounded-lg border border-sand-200 bg-sand-50 px-4 py-2.5 transition hover:border-brand-400 focus-within:border-brand-700 focus-within:bg-white">
+      <span className="block text-[10px] font-semibold uppercase tracking-[0.16em] text-brand-700/70">{label}</span>
       {children}
     </label>
   );
 }
 
-const field = "w-full bg-transparent text-lg font-extrabold text-slate-900 outline-none";
+const field = "w-full bg-transparent text-base font-semibold text-brand-950 outline-none";
 
 export function SearchWidget({
   cities,
@@ -93,36 +93,37 @@ export function SearchWidget({
         setFrom(to);
         setTo(from);
       }}
-      className="absolute left-1/2 top-1/2 z-10 grid h-9 w-9 -translate-x-1/2 -translate-y-1/2 place-items-center rounded-full bg-white text-brand-600 shadow ring-1 ring-slate-200 hover:bg-brand-50"
+      className="absolute left-1/2 top-1/2 z-10 grid h-8 w-8 -translate-x-1/2 -translate-y-1/2 rotate-45 place-items-center rounded-md bg-accent-500 text-brand-950 shadow-md hover:bg-accent-400"
     >
-      <ArrowLeftRight className="h-4 w-4" />
+      <ArrowLeftRight className="h-4 w-4 -rotate-45" />
     </button>
   );
 
   return (
-    <div className={`relative ${compact ? "" : "pb-8"}`}>
+    <div className={`relative ${tabs ? "overflow-hidden rounded-2xl bg-white shadow-2xl shadow-brand-950/30 md:grid md:grid-cols-[170px_1fr]" : ""}`}>
       {tabs && (
-        <div className="relative z-10 mx-auto -mb-6 flex w-fit max-w-full gap-1 overflow-x-auto rounded-2xl bg-white p-2 shadow-lg ring-1 ring-slate-200">
+        <div className="flex gap-1 overflow-x-auto bg-brand-900 p-2 md:flex-col md:gap-0.5 md:p-3">
           {TABS.map(({ id, label, icon: Icon }) => (
             <button
               key={id}
               type="button"
               onClick={() => setTab(id)}
-              className={`flex min-w-[76px] flex-col items-center gap-1 rounded-xl px-3 py-2 text-xs font-bold transition ${tab === id ? "bg-brand-50 text-brand-700" : "text-slate-500 hover:text-brand-600"}`}
+              className={`flex shrink-0 items-center gap-2.5 rounded-lg px-3 py-2.5 text-sm font-medium transition md:w-full ${tab === id ? "bg-accent-500 text-brand-950" : "text-white/70 hover:bg-white/10 hover:text-white"}`}
             >
-              <Icon className={`h-6 w-6 ${tab === id ? "text-brand-600" : ""}`} />
+              <Icon className="h-4 w-4" />
               {label}
             </button>
           ))}
         </div>
       )}
-      <form onSubmit={submit} className={`card relative px-5 ${tabs ? "pt-10" : "pt-5"} ${compact ? "pb-5" : "pb-12"}`}>
+      <form onSubmit={submit} className={`relative p-5 ${tabs ? "md:p-7" : "rounded-xl bg-white shadow-xl shadow-black/20"}`}>
+        {tabs && <p className="eyebrow mb-3">Search {TABS.find((t) => t.id === tab)?.label.toLowerCase()}</p>}
         {tab === "flights" && (
           <>
-            <div className="mb-3 flex flex-wrap items-center gap-4 text-sm font-semibold">
+            <div className="mb-3 inline-flex flex-wrap gap-1 rounded-lg bg-sand-100 p-1 text-sm font-medium">
               {[["One way", false], ["Round trip", true]].map(([l, v]) => (
-                <label key={String(l)} className="flex cursor-pointer items-center gap-2">
-                  <input type="radio" checked={round === v} onChange={() => setRound(v as boolean)} className="accent-brand-600" /> {l as string}
+                <label key={String(l)} className="flex cursor-pointer items-center gap-2 rounded-md px-3 py-1.5 has-checked:bg-white has-checked:text-brand-800 has-checked:shadow-sm">
+                  <input type="radio" checked={round === v} onChange={() => setRound(v as boolean)} className="accent-brand-700" /> {l as string}
                 </label>
               ))}
             </div>
@@ -203,10 +204,10 @@ export function SearchWidget({
         )}
         {tab === "cabs" && (
           <>
-            <div className="mb-3 flex flex-wrap items-center gap-4 text-sm font-semibold">
+            <div className="mb-3 inline-flex flex-wrap gap-1 rounded-lg bg-sand-100 p-1 text-sm font-medium">
               {[["ONEWAY", "Outstation one-way"], ["ROUND", "Outstation round trip"], ["AIRPORT", "Airport transfer"]].map(([v, l]) => (
-                <label key={v} className="flex cursor-pointer items-center gap-2">
-                  <input type="radio" checked={trip === v} onChange={() => setTrip(v)} className="accent-brand-600" /> {l}
+                <label key={v} className="flex cursor-pointer items-center gap-2 rounded-md px-3 py-1.5 has-checked:bg-white has-checked:text-brand-800 has-checked:shadow-sm">
+                  <input type="radio" checked={trip === v} onChange={() => setTrip(v)} className="accent-brand-700" /> {l}
                 </label>
               ))}
             </div>
@@ -232,8 +233,9 @@ export function SearchWidget({
             </div>
           </>
         )}
-        <div className={compact ? "mt-4 flex justify-end" : "absolute -bottom-6 left-1/2 -translate-x-1/2"}>
-          <button className="btn-primary px-12 py-3.5 text-lg uppercase tracking-wide" data-testid="search-btn">
+        <div className={`flex items-center justify-between gap-3 ${compact ? "mt-3" : "mt-5 border-t border-dashed border-sand-200 pt-4"}`}>
+          <p className={`text-xs text-slate-500 ${compact ? "hidden" : "hidden sm:block"}`}>Live fares · Free cancellation options · Instant e-ticket</p>
+          <button className={`btn-accent ml-auto ${compact ? "px-8" : "px-10 py-3 text-base"}`} data-testid="search-btn">
             <Search className="h-5 w-5" /> Search
           </button>
         </div>

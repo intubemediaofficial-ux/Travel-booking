@@ -12,7 +12,7 @@ export async function Footer() {
     ["YouTube", s.youtube],
   ].filter(([, v]) => v);
   return (
-    <footer className="no-print mt-16 bg-brand-900 text-slate-300">
+    <footer className="no-print pattern-dots mt-16 border-t-4 border-accent-500 bg-brand-950 text-slate-300">
       <div className="mx-auto grid max-w-7xl gap-6 border-b border-white/10 px-4 py-8 sm:grid-cols-3">
         {[
           [ShieldCheck, "Secure payments", "100% safe & encrypted checkout"],
@@ -22,7 +22,7 @@ export async function Footer() {
           const I = Icon as typeof ShieldCheck;
           return (
             <div key={t as string} className="flex items-center gap-3">
-              <span className="grid h-11 w-11 place-items-center rounded-xl bg-white/10"><I className="h-5 w-5 text-accent-500" /></span>
+              <span className="grid h-11 w-11 place-items-center rounded-lg border border-accent-500/40"><I className="h-5 w-5 text-accent-400" /></span>
               <div><p className="font-bold text-white">{t as string}</p><p className="text-sm">{d as string}</p></div>
             </div>
           );
@@ -39,7 +39,7 @@ export async function Footer() {
           </ul>
         </div>
         <div>
-          <p className="mb-3 font-bold text-white">Book</p>
+          <p className="mb-3 text-[11px] font-semibold uppercase tracking-[0.2em] text-accent-400">Book</p>
           <ul className="space-y-2 text-sm">
             {["flights", "hotels", "holidays", "trains", "buses", "cabs"].map((x) => (
               <li key={x}><Link className="capitalize hover:text-white" href={`/${x}`}>{x}</Link></li>
@@ -47,7 +47,7 @@ export async function Footer() {
           </ul>
         </div>
         <div>
-          <p className="mb-3 font-bold text-white">Your account</p>
+          <p className="mb-3 text-[11px] font-semibold uppercase tracking-[0.2em] text-accent-400">Your account</p>
           <ul className="space-y-2 text-sm">
             <li><Link className="hover:text-white" href="/my-trips">My Trips</Link></li>
             <li><Link className="hover:text-white" href="/wallet">Wallet</Link></li>
@@ -57,7 +57,7 @@ export async function Footer() {
           </ul>
         </div>
         <div>
-          <p className="mb-3 font-bold text-white">Company</p>
+          <p className="mb-3 text-[11px] font-semibold uppercase tracking-[0.2em] text-accent-400">Company</p>
           <ul className="space-y-2 text-sm">
             <li><Link className="hover:text-white" href="/about">About us</Link></li>
             <li><Link className="hover:text-white" href="/support">Customer support</Link></li>

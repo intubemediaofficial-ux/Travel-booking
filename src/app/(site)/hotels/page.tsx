@@ -63,9 +63,9 @@ export default async function Page({ searchParams }: { searchParams: Promise<SP>
     <>
       <SearchBand><SearchWidget cities={cities} initial="hotels" tabs={false} compact params={{ city, in: cin, out: cout, rooms: String(rooms), guests: String(guests) }} /></SearchBand>
       <div className="mx-auto max-w-7xl px-4 py-6">
-        <h1 className="mb-4 text-xl font-extrabold">Hotels in {cityName} <span className="text-sm font-semibold text-slate-500">· {fmtDate(cin)} – {fmtDate(cout)} · {nights} night{nights > 1 ? "s" : ""} · {rooms} room, {guests} guests</span></h1>
+        <h1 className="mb-4 text-xl font-bold">Hotels in {cityName} <span className="text-sm font-semibold text-slate-500">· {fmtDate(cin)} – {fmtDate(cout)} · {nights} night{nights > 1 ? "s" : ""} · {rooms} room, {guests} guests</span></h1>
         <div className="grid gap-6 lg:grid-cols-[260px_1fr]">
-          <aside className="card h-fit p-5">
+          <aside className="card h-fit overflow-hidden p-5 lg:sticky lg:top-24"><p className="-mx-5 -mt-5 mb-4 flex items-center justify-between bg-brand-900 px-5 py-3 text-sm font-semibold text-white">Refine results <span className="h-2 w-2 rounded-full bg-accent-500" /></p>
             <FilterForm keep={keep}>
               <div><label className="label">Search by hotel or area</label><input name="q" defaultValue={q} className="input" placeholder="e.g. Baga, Taj" /></div>
               <FilterGroup title="Price per night">{PRICES.map(([v, l]) => <Check key={v} name="price" value={v} label={l} checked={prices.includes(v)} />)}</FilterGroup>
@@ -80,17 +80,17 @@ export default async function Page({ searchParams }: { searchParams: Promise<SP>
           <section className="space-y-4">
             <div className="flex flex-wrap gap-2 text-sm">
               {[["popular", "Popular"], ["low", "Price: low to high"], ["high", "Price: high to low"], ["rating", "User rating"]].map(([k, l]) => (
-                <Link key={k} href={`/hotels?${qs({ sort: k })}`} className={`rounded-full px-4 py-1.5 font-bold ${sort === k ? "bg-brand-600 text-white" : "bg-white text-slate-600 ring-1 ring-slate-200"}`}>{l}</Link>
+                <Link key={k} href={`/hotels?${qs({ sort: k })}`} className={`border-b-2 px-3 py-2 font-semibold transition ${sort === k ? "border-accent-500 text-brand-800" : "border-transparent text-slate-500 hover:text-brand-700"}`}>{l}</Link>
               ))}
               <span className="ml-auto self-center text-slate-500">{list.length} properties</span>
             </div>
             {list.length === 0 ? <Empty title="No hotels match" text="Try changing dates, guests or filters." /> : list.map(({ h, best, per, left }) => (
-              <Link key={h.id} href={`/hotels/${h.slug}?${stay}`} className="card grid overflow-hidden transition hover:shadow-lg md:grid-cols-[260px_1fr_190px]" data-testid="hotel-card">
+              <Link key={h.id} href={`/hotels/${h.slug}?${stay}`} className="card grid overflow-hidden transition hover:-translate-y-0.5 hover:shadow-xl md:grid-cols-[260px_1fr_190px]" data-testid="hotel-card">
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img src={h.images[0]} alt={h.name} className="h-52 w-full object-cover md:h-full" />
                 <div className="p-5">
                   <div className="flex items-center gap-2"><Stars n={h.stars} /><span className="text-xs text-slate-500">{h.type}</span></div>
-                  <h2 className="mt-1 text-lg font-extrabold text-slate-900">{h.name}</h2>
+                  <h2 className="mt-1 text-lg font-bold text-slate-900">{h.name}</h2>
                   <p className="flex items-center gap-1 text-sm text-brand-700"><MapPin className="h-3.5 w-3.5" /> {h.locality}, {h.city.name}</p>
                   <div className="mt-3 flex flex-wrap gap-1.5">{h.amenities.slice(0, 5).map((a) => <span key={a} className="chip">{a}</span>)}</div>
                   <div className="mt-3 space-y-1 text-xs font-semibold">
@@ -103,7 +103,7 @@ export default async function Page({ searchParams }: { searchParams: Promise<SP>
                   <div className="text-right">
                     {left <= 3 && <p className="text-xs font-bold text-red-600">Only {left} left!</p>}
                     <p className="text-xs text-slate-400 line-through">₹{Math.round(per * 1.25).toLocaleString("en-IN")}</p>
-                    <p className="text-2xl font-extrabold">₹{per.toLocaleString("en-IN")}</p>
+                    <p className="text-2xl font-bold">₹{per.toLocaleString("en-IN")}</p>
                     <p className="text-[11px] text-slate-500">per night + taxes</p>
                     <span className="btn-primary mt-2">View rooms</span>
                   </div>

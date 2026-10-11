@@ -20,7 +20,7 @@ export default async function Page() {
       <PageTitle title="24×7 customer support" subtitle="We're here to help with bookings, cancellations and refunds." />
       <div className="mx-auto grid max-w-6xl gap-6 px-4 py-10 lg:grid-cols-[1fr_360px]">
         <div className="space-y-3">
-          <h2 className="text-xl font-extrabold">Frequently asked questions</h2>
+          <h2 className="text-xl font-bold">Frequently asked questions</h2>
           {FAQ.map(([q, a]) => (
             <details key={q} className="card group p-5"><summary className="cursor-pointer font-bold">{q}</summary><p className="mt-2 text-sm text-slate-600">{a}</p></details>
           ))}

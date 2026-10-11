@@ -42,7 +42,7 @@ export default async function BookingAdmin({ params }: { params: Promise<{ ref: 
           <div className="card p-4 text-sm">
             <h2 className="mb-2 font-bold">Fare</h2>
             {([["Base fare", b.baseAmount], ["Taxes", b.taxes], ["Convenience fee", b.fee], ["Discount", -b.discount], ["Wallet used", -b.walletUsed]] as const).map(([k, v]) => <div key={k} className="flex justify-between py-1"><span className="text-slate-500">{k}{k === "Discount" && b.couponCode ? ` (${b.couponCode})` : ""}</span><span>{inr(v)}</span></div>)}
-            <div className="mt-2 flex justify-between border-t pt-2 font-extrabold"><span>Total paid</span><span>{inr(b.total)}</span></div>
+            <div className="mt-2 flex justify-between border-t pt-2 font-bold"><span>Total paid</span><span>{inr(b.total)}</span></div>
             {b.refundAmount > 0 && <div className="flex justify-between pt-1 font-bold text-emerald-700"><span>Refunded ({b.refundTo})</span><span>{inr(b.refundAmount)}</span></div>}
             {b.cancelReason && <p className="mt-2 text-xs text-slate-500">Cancel reason: {b.cancelReason}</p>}
           </div>
